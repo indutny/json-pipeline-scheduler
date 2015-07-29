@@ -20,6 +20,7 @@ exports.test = function test(name, body, expected) {
     var s = scheduler.create(p);
     var out = s.run();
 
+    out.reindex();
     var actual = out.render({ cfg: true, dominance: true }, 'printable');
     assertText.equal(actual, exports.fn2str(expected));
   });
