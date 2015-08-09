@@ -43,7 +43,7 @@ describe('JSON Pipeline Scheduler', function() {
         i3 = add i1, i2
         i4 = literal 10
         i5 = literal 2
-        i6 = jump
+        i6 = jump ^b0
       }
       b0 -> b1
       b0 => b1
@@ -90,12 +90,12 @@ describe('JSON Pipeline Scheduler', function() {
       b0 -> b1, b2
       b0 => b3, b1, b2
       b1 {
-        i4 = jump
+        i4 = jump ^b1
       }
       b1 -> b3
       b1 ~> b3
       b2 {
-        i5 = jump
+        i5 = jump ^b2
       }
       b2 -> b3
       b2 ~> b3
@@ -133,12 +133,12 @@ describe('JSON Pipeline Scheduler', function() {
       b0 -> b1, b2
       b0 => b3, b1, b2
       b1 {
-        i4 = jump
+        i4 = jump ^b1
       }
       b1 -> b3
       b1 ~> b3
       b2 {
-        i5 = jump
+        i5 = jump ^b2
       }
       b2 -> b3
       b2 ~> b3
