@@ -14,6 +14,8 @@ describe('JSON Pipeline Scheduler', function() {
     var body = p.add('region');
     var exit = p.add('region');
 
+    start = p.add('jump').setControl(start);
+
     var i0 = p.add('literal').addLiteral(0);
     var a = p.add('read()');
 
@@ -25,7 +27,7 @@ describe('JSON Pipeline Scheduler', function() {
 
     var ten = p.add('literal').addLiteral(10);
     var cc = p.add('le', [ i2, ten ]);
-    var branch = p.add('if', cc).setControl(body);
+    var branch = p.add('if', cc).setControl(phi);
 
     body.setControl(start, branch);
 
@@ -71,14 +73,16 @@ describe('JSON Pipeline Scheduler', function() {
     var left = p.add('region').setControl(branch);
 
     var leftValue = p.add('literal').addLiteral('left');
+    var leftJump = p.add('jump').setControl(left);
 
     var right = p.add('region').setControl(branch);
 
     var rightValue = p.add('literal').addLiteral('right');
+    var rightJump = p.add('jump').setControl(right);
 
-    var merge = p.add('region').setControl(left, right);
+    var merge = p.add('region').setControl(leftJump, rightJump);
     var phi = p.add('ssa:phi', [ leftValue, rightValue ]).setControl(merge);
-    var ret = p.add('return', phi).setControl(merge);
+    var ret = p.add('return', phi).setControl(phi);
   }, function() {/*
     pipeline {
       b0 {
