@@ -35,32 +35,32 @@ describe('JSON Pipeline Scheduler', function() {
     exit.setControl(branch);
     var ret = p.add('return', mul).setControl(exit);
   }, function() {/*
-    pipeline {
-      b0 {
-        i0 = literal 0
-        i1 = read()
-        i2 = literal 1
-        i3 = add i1, i2
-        i4 = literal 10
-        i5 = literal 2
-        i6 = jump ^b0
+      pipeline {
+        b0 {
+          i0 = literal 0
+          i1 = read()
+          i2 = literal 1
+          i3 = add i1, i2
+          i4 = literal 10
+          i5 = jump ^b0
+        }
+        b0 -> b1
+        b0 => b1
+        b1 {
+          i6 = ssa:phi ^b1, i0, i7
+          i7 = add i6, i3
+          i8 = le i7, i4
+          i9 = if ^b1, i8
+        }
+        b1 -> b1, b2
+        b1 => b2
+        b1 ~> b1
+        b2 {
+          i10 = literal 2
+          i11 = mul i7, i10
+          i12 = return ^b2, i11
+        }
       }
-      b0 -> b1
-      b0 => b1
-      b1 {
-        i7 = ssa:phi ^b1, i0, i8
-        i8 = add i7, i3
-        i9 = le i8, i4
-        i10 = if ^b1, i9
-      }
-      b1 -> b1, b2
-      b1 => b2
-      b1 ~> b1
-      b2 {
-        i11 = mul i8, i5
-        i12 = return ^b2, i11
-      }
-    }
   */});
 
   fixtures.test('merge/branch', function(p) {
@@ -83,67 +83,24 @@ describe('JSON Pipeline Scheduler', function() {
     pipeline {
       b0 {
         i0 = literal true
-        i1 = literal "left"
-        i2 = literal "right"
-        i3 = if ^b0, i0
+        i1 = if ^b0, i0
       }
       b0 -> b1, b2
       b0 => b3, b1, b2
       b1 {
-        i4 = jump ^b1
+        i2 = literal "right"
+        i3 = jump ^b1
       }
       b1 -> b3
       b1 ~> b3
       b2 {
+        i4 = literal "left"
         i5 = jump ^b2
       }
       b2 -> b3
       b2 ~> b3
       b3 {
-        i6 = ssa:phi ^b3, i1, i2
-        i7 = return ^b3, i6
-      }
-    }
-  */});
-
-  fixtures.test('store and load', function(p) {
-    var start = p.add('start');
-    var t = p.add('literal').addLiteral(true);
-    var branch = p.add('if', t).setControl(start);
-
-    var left = p.add('region').setControl(branch);
-
-    var leftValue = p.add('literal').addLiteral('left');
-
-    var right = p.add('region').setControl(branch);
-
-    var rightValue = p.add('literal').addLiteral('right');
-
-    var merge = p.add('region').setControl(left, right);
-    var phi = p.add('ssa:phi', [ leftValue, rightValue ]).setControl(merge);
-    var ret = p.add('return', phi).setControl(merge);
-  }, function() {/*
-    pipeline {
-      b0 {
-        i0 = literal true
-        i1 = literal "left"
-        i2 = literal "right"
-        i3 = if ^b0, i0
-      }
-      b0 -> b1, b2
-      b0 => b3, b1, b2
-      b1 {
-        i4 = jump ^b1
-      }
-      b1 -> b3
-      b1 ~> b3
-      b2 {
-        i5 = jump ^b2
-      }
-      b2 -> b3
-      b2 ~> b3
-      b3 {
-        i6 = ssa:phi ^b3, i1, i2
+        i6 = ssa:phi ^b3, i4, i2
         i7 = return ^b3, i6
       }
     }
