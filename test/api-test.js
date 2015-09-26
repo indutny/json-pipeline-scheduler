@@ -52,7 +52,7 @@ describe('JSON Pipeline Scheduler', function() {
           i6 = ssa:phi ^b1, i0, i7
           i7 = add i6, i3
           i8 = le i7, i4
-          i9 = if ^b1, i8
+          i9 = if ^i6, i8
         }
         b1 -> b1, b2
         b1 => b2
@@ -105,7 +105,7 @@ describe('JSON Pipeline Scheduler', function() {
       b2 ~> b3
       b3 {
         i6 = ssa:phi ^b3, i4, i2
-        i7 = return ^b3, i6
+        i7 = return ^i6, i6
       }
     }
   */});
