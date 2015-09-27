@@ -128,4 +128,36 @@ describe('JSON Pipeline Scheduler', function() {
       }
     }
   */});
+
+  fixtures.test('loop control edges', function(p) {
+    var start = p.add('start');
+    var startEnd = p.add('jump').setControl(start);
+
+    var merge = p.add('region');
+    var mergeEnd = p.add('jump').setControl(merge);
+
+    var end = p.add('region').setControl(mergeEnd);
+    var endEnd = p.add('jump').setControl(end);
+
+    merge.setControl(startEnd, endEnd);
+  }, function() {/*
+    pipeline {
+      b0 {
+        i0 = jump ^b0
+      }
+      b0 -> b1
+      b0 => b1
+      b1 {
+        i1 = jump ^b1
+      }
+      b1 -> b2
+      b1 => b2
+      b1 ~> b1
+      b2 {
+        i2 = jump ^b2
+      }
+      b2 -> b1
+      b2 ~> b1
+    }
+  */});
 });
