@@ -92,19 +92,19 @@ describe('JSON Pipeline Scheduler', function() {
       b0 -> b1, b2
       b0 => b3, b1, b2
       b1 {
-        i2 = literal "right"
+        i2 = literal "left"
         i3 = jump ^b1
       }
       b1 -> b3
       b1 ~> b3
       b2 {
-        i4 = literal "left"
+        i4 = literal "right"
         i5 = jump ^b2
       }
       b2 -> b3
       b2 ~> b3
       b3 {
-        i6 = ssa:phi ^b3, i4, i2
+        i6 = ssa:phi ^b3, i2, i4
         i7 = return ^i6, i6
       }
     }
