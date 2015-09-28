@@ -36,6 +36,6 @@
   "dependencies": {
     "bitfield.js": "^1.2.0",
     "dominance-frontier": "^2.0.0",
-    "json-pipeline": "^3.1.0"
+    "json-pipeline": "^3.8.0"
   }
 }
