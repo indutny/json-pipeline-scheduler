@@ -1,6 +1,6 @@
 {
   "name": "json-pipeline-scheduler",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "JSON pipeline for abstract compiler",
   "main": "lib/scheduler.js",
   "scripts": {
