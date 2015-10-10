@@ -166,21 +166,13 @@ describe('JSON Pipeline Scheduler', function() {
     p.add('effect').setControl(start);
 
     var middle = p.add('middle').setControl(start);
-    var ret = p.add('ret').setControl(middle);
-
-    // Last block to force `ret` be at the end
-    var exit = p.add('region');
-    exit.setControl(ret);
+    p.add('exit').setControl(middle);
   }, function() {/*
     pipeline {
       b0 {
         i0 = middle ^b0
         i1 = effect ^b0
-        i2 = ret ^i0
-      }
-      b0 -> b1
-      b0 => b1
-      b1 {
+        i2 = exit ^i0
       }
     }
   */});
