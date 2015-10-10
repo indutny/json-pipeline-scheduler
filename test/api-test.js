@@ -160,4 +160,28 @@ describe('JSON Pipeline Scheduler', function() {
       b2 ~> b1
     }
   */});
+
+  fixtures.test('control trees and chains', function(p) {
+    var start = p.add('start');
+    p.add('effect').setControl(start);
+
+    var middle = p.add('middle').setControl(start);
+    var ret = p.add('ret').setControl(middle);
+
+    // Last block to force `ret` be at the end
+    var exit = p.add('region');
+    exit.setControl(ret);
+  }, function() {/*
+    pipeline {
+      b0 {
+        i0 = middle ^b0
+        i1 = effect ^b0
+        i2 = ret ^i0
+      }
+      b0 -> b1
+      b0 => b1
+      b1 {
+      }
+    }
+  */});
 });
